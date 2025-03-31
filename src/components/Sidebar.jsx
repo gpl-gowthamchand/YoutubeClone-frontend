@@ -40,6 +40,7 @@ function Sidebar() {
                     }
                   }}
                   key={e.id}
+                  className="hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200 rounded-lg"
                 >
                   <div
                     style={{
@@ -76,6 +77,7 @@ function Sidebar() {
                     }
                   }}
                   key={e.id}
+                  className="hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-200 rounded-lg"
                 >
                   <div
                     style={{

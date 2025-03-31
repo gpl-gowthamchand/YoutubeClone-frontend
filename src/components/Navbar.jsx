@@ -11,6 +11,7 @@ import Stack from "@mui/material/Stack";
 import LinearProgress from "@mui/material/LinearProgress";
 import DarkModeButton from "./DarkModeButton";
 import { debounce } from "lodash";
+import { AiOutlineAudio, AiOutlineBell, AiOutlinePlus } from "react-icons/ai"; // Import microphone, bell, and plus icons
 
 function Navbar({ sidebarExtended, setSidebarExtended }) {
   const dispatch = useDispatch();
@@ -21,6 +22,13 @@ function Navbar({ sidebarExtended, setSidebarExtended }) {
   const videoLoading = useSelector((state) => state.video.isLoading);
   const searchLoading = useSelector((state) => state.search.isLoading);
   const { darkMode } = useSelector((state) => state.darkMode);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false); // State for notifications
+  const notifications = [
+    "Channel A uploaded a new video.",
+    "Channel B started a live stream.",
+    "Channel C posted a new community update.",
+  ]; // Example notifications
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
@@ -67,17 +75,17 @@ function Navbar({ sidebarExtended, setSidebarExtended }) {
                 )}
               </Link>
             </div>
-            <form onSubmit={handleOnSubmit} className="-mt-3">
-              <div className="relative w-[170px] sm:w-[420px] ">
+            <form onSubmit={handleOnSubmit} className="-mt-3 flex items-center gap-3">
+              <div className="relative w-[250px] sm:w-[500px]"> {/* Increased width */}
                 <input
                   onChange={(e) => debouncedSetSearchValue(e.target.value)}
                   value={searchValue}
                   type="search"
                   name="search"
                   id="default-search"
-                  className={`block p-2 pl-10 w-full text-sm text-gray-900 ${
-                    darkMode ? "bg-dark" : "bg-gray-50"
-                  } rounded-lg border-[1px] border-[#cccccc] focus:outline-none`}
+                  className={`block p-2 pl-10 w-full text-sm ${
+                    darkMode ? "text-white bg-dark" : "text-black bg-gray-50"
+                  } rounded-full border-[1px] border-[#cccccc] focus:outline-none`} // Adjusted for dark mode
                   placeholder="Search"
                   aria-label="Search"
                   required
@@ -87,7 +95,7 @@ function Navbar({ sidebarExtended, setSidebarExtended }) {
                   aria-label="Submit Search"
                   className={`text-white absolute right-0 bottom-0 top-0 font-medium text-sm px-4 py-2 ${
                     darkMode ? "bg-dark" : "bg-[#f8f8f8]"
-                  } border-[1px] border-[#cccccc]`}
+                  } border-[1px] border-[#cccccc] rounded-r-full`}
                 >
                   <svg
                     className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -105,10 +113,129 @@ function Navbar({ sidebarExtended, setSidebarExtended }) {
                   </svg>
                 </button>
               </div>
+              <button
+                aria-label="Voice Search"
+                className="flex items-center justify-center px-3"
+              >
+                <AiOutlineAudio className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              </button>
             </form>
           </div>
 
-          <DarkModeButton />
+          <div className="flex items-center space-x-4 pr-4">
+            <DarkModeButton />
+            <button
+              aria-label="Create"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded-full"
+            >
+              <AiOutlinePlus className="w-5 h-5 text-black dark:text-white" />
+              <span className="text-sm font-medium text-black dark:text-white">
+                Create
+              </span>
+            </button>
+            <div className="relative">
+              <button
+                aria-label="Notifications"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 dark:bg-gray-600"
+                onClick={() => setNotificationsOpen(!notificationsOpen)} // Toggle notifications window
+              >
+                <AiOutlineBell className="w-5 h-5 text-black dark:text-white" />
+              </button>
+              {notificationsOpen && (
+                <div
+                  className={`absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-20`}
+                >
+                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-300">
+                    {notifications.length > 0 ? (
+                      notifications.map((notification, index) => (
+                        <li
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                        >
+                          {notification}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-4 py-2 text-gray-500">
+                        No new notifications
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div className="relative">
+              <button
+                aria-label="Profile"
+                className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                {/* Placeholder for profile icon */}
+                <span className="text-sm font-bold text-black dark:text-white">
+                  P
+                </span>
+              </button>
+              {dropdownOpen && (
+                <div
+                  className={`absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg`}
+                >
+                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-300">
+                    <li className="px-4 py-2 font-bold">Profile Name</li>
+                    <li className="px-4 py-2 text-gray-500">email@example.com</li>
+                    <hr className="my-2 border-gray-300 dark:border-gray-600" />
+                    <li className="px-4 py-2 text-blue-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Create a channel
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Google Account
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Switch account
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Sign out
+                    </li>
+                    <hr className="my-2 border-gray-300 dark:border-gray-600" />
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      YouTube Studio
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Purchases and memberships
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Your data in YouTube
+                    </li>
+                    <hr className="my-2 border-gray-300 dark:border-gray-600" />
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Appearance: Device theme
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Language: English
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Restricted Mode: Off
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Location: India
+                    </li>
+                    <hr className="my-2 border-gray-300 dark:border-gray-600" />
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Keyboard shortcuts
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Settings
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Help
+                    </li>
+                    <li className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                      Send feedback
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
         </nav>
       </div>
     </>
