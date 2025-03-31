@@ -7,6 +7,10 @@ This is a simple frontend project for a YouTube clone. It uses React and Redux t
 - Responsive design for different screen sizes.
 - Dark mode support.
 
+# Live demo
+
+You can check the live demo <a href="https://youtubeclone-g.netlify.app/">here</a> 👈.
+
 ## Getting Started
 1. Clone the repository:
    ```bash
